@@ -859,7 +859,7 @@ class WinINF:
         self.__FileCodec=codec
 
         self.__FileName=Name
-        f=open(Name,encoding=self.__FileCodec)
+        f=open(Name,encoding=self.__FileCodec,errors='surrogateescape')
 
         #SepRE=re.compile('[^";=]*("|;|=)?')
         SepRE = re.compile('[^][";=]*(\\]|\\[|"|;|=)?')
@@ -1048,7 +1048,7 @@ class WinINF:
             print("Error: empty inf file, nothing to save")
             return False
 
-        f=open(self.__FileName,"w",encoding=self.__FileCodec)
+        f=open(self.__FileName,"w",encoding=self.__FileCodec,errors='surrogateescape')
 
         for Current in self:
             f.write(Current.Save())
