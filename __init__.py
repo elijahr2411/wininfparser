@@ -1,0 +1,1 @@
+from wininfparser import WinINF, INFsection

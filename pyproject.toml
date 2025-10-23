@@ -1,0 +1,11 @@
+[project]
+name = "wininfparser"
+version = "1.0.12.1"
+authors = [
+    { name="arutar" },
+    { name="Elijah R", email="elijah@elijahr.dev" }
+]
+description = "Windows INF file parser for python"
+readme = "README.md"
+license = "GPL-3.0"
+license-files = ["LICENSE"]
