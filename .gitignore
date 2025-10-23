@@ -1,3 +1,4 @@
 Doxyfile
 .*
 .github/
+__pycache__/
