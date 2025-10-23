@@ -729,7 +729,9 @@ class INFsection:
 #
 class WinINF:
     ## Default constructor
-    def __init__(self):
+    #  @param icase {bool} Ignore case in section names (conforms to Microsoft specification)
+    #  @param strip {bool} Strip surrounding whitespace from keys and values
+    def __init__(self, *, icase: bool = True, strip: bool = True):
         self.__FileName=""
         self.__Head=None
         self.__Tail=None
@@ -737,6 +739,8 @@ class WinINF:
         self.__ItemCount=0
         self.__SectionsDict={}
         self.__FileCodec = None
+        self.__icase = icase
+        self.__strip = strip
 
     ## Lets go through the sections!
     #  @return WinINF
@@ -797,7 +801,7 @@ class WinINF:
     #  @param Name (str)
     #  @return INFsection
     def GetSection(self,Name):
-        return self.__SectionsDict.get(Name)
+        return self.__SectionsDict.get(Name.lower() if self.__icase else Name)
 
     ## Adds section
     #  @param Section (INFsection)
@@ -819,7 +823,7 @@ class WinINF:
             self.__Tail = Section
 
         if Section.GetName().rstrip():
-            self.__SectionsDict[Section.GetName()] = Section
+            self.__SectionsDict[Section.GetName().lower() if self.__icase else Section.GetName()] = Section
         self.__ItemCount += 1
 
     ## Removes selected section!
@@ -909,7 +913,7 @@ class WinINF:
                     self.__Tail.SetValid()
                     self.__Tail=NewSection
 
-                self.__SectionsDict[NewSection.GetName()]=NewSection
+                self.__SectionsDict[NewSection.GetName().lower() if self.__icase else NewSection.GetName()]=NewSection
                 self.__ItemCount+=1
                 continue
 
@@ -1019,9 +1023,9 @@ class WinINF:
                     continue
 
                 if v:
-                    self.__Tail.AddData(k,v,c,fraw=True)
+                    self.__Tail.AddData(k.strip() if self.__strip else k,v.strip() if self.__strip else v,c,fraw=True)
                 else:
-                    self.__Tail.AddData(k, None, c,fraw=True)
+                    self.__Tail.AddData(k.strip() if self.__strip else k, None, c,fraw=True)
             else:
                 if self.__Tail is None and f_error == False:
                     print("Error: File [{0}] Line {1} does not belong to any section. [skiped]".format(os.path.basename(self.__FileName),lineNumber))
